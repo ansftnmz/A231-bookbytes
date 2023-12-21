@@ -1,5 +1,7 @@
 import 'package:bookbytes/models/user.dart';
 import 'package:bookbytes/shared/loginpage.dart';
+import 'package:bookbytes/view/cartpage.dart';
+import 'package:bookbytes/view/bookpage.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -13,16 +15,22 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
   String mainTitle = "";
-  @override
+  late List<Widget> tab_childs;
   @override
   void initState() {
     super.initState();
     print(widget.userdata.username);
-    
+    tab_childs = [
+      homePage(userdata: widget.userdata,),
+      CartPage()
+    ];
   }
   Widget build(BuildContext context) {
+    
+    
     return Scaffold(
-      body: Center(child: Text('booklist main page')),
+
+      body: tab_childs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         onTap: onTabTapped,
@@ -31,7 +39,6 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Home",
-            
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
@@ -51,7 +58,6 @@ class _MainPageState extends State<MainPage> {
       _currentIndex = index;
       if (_currentIndex == 0) {
         mainTitle = "Home";
-        
       }
       if (_currentIndex == 1) {
         mainTitle = "Cart";
