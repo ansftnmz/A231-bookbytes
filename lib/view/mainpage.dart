@@ -2,6 +2,7 @@ import 'package:bookbytes/models/user.dart';
 import 'package:bookbytes/shared/loginpage.dart';
 import 'package:bookbytes/view/cartpage.dart';
 import 'package:bookbytes/view/bookpage.dart';
+import 'package:bookbytes/view/profilepage.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -22,7 +23,8 @@ class _MainPageState extends State<MainPage> {
     print(widget.userdata.username);
     tab_childs = [
       homePage(userdata: widget.userdata,),
-      CartPage()
+      CartPage(user: widget.userdata,),
+      ProfilePage(),
     ];
   }
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class _MainPageState extends State<MainPage> {
         mainTitle = "Profile";
         {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+              context, MaterialPageRoute(builder: (context) => ProfilePage()));
         }
         ;
       }

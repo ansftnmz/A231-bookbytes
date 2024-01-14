@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:bookbytes/models/user.dart';
 import 'package:bookbytes/shared/loginpage.dart';
+import 'package:bookbytes/view/cartpage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/books.dart';
@@ -89,7 +91,7 @@ class _BookDetailsState extends State<BookDetails> {
                   Text("Quantity Available ${widget.book.bookQty}"),
                   ElevatedButton(
                     onPressed: () {
-                      print(widget.user.useremail);
+                      //print(widget.user.useremail);
                       if (widget.user.useremail == 'unregistered@email.com') {
                         Navigator.pushReplacement(
                             context,
@@ -97,6 +99,7 @@ class _BookDetailsState extends State<BookDetails> {
                                 builder: (content) => LoginScreen()));
                       } else {
                         // Add to cart function
+                        insertCartDialog();
                       }
                     },
                     child: Text('Add to Cart'),
@@ -109,4 +112,71 @@ class _BookDetailsState extends State<BookDetails> {
       ),
     );
   }
+
+    void insertCartDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          title: const Text(
+            "Insert to cart?",
+            style: TextStyle(),
+          ),
+          content: const Text("Are you sure?", style: TextStyle()),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "Yes",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                insertCart();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "No",
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void insertCart() {
+    http.post(
+        Uri.parse("${MyServerConfig.server}/bookbytes/php/insertcarts.php"),
+        body: {
+          "buyer_id": widget.user.userid.toString(),
+          "seller_id": widget.book.sellerId.toString(),
+          "book_id": widget.book.bookId.toString(),
+        }).then((response) {
+      log(response.body);
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        if (data['status'] == "success") {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Success"),
+            backgroundColor: Colors.green,
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Failed"),
+            backgroundColor: Colors.red,
+          ));
+        }
+      }
+    });
+  }
+
 }
+
+
