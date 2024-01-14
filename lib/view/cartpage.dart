@@ -124,8 +124,7 @@ class _CartPageState extends State<CartPage> {
                 }
               }
             }
-            total = total +
-                double.parse(v['book_price'] * int.parse(v['cart_qty']));
+            total = total + (double.parse(v['book_price']) * int.parse(v['cart_qty']));
           });
           print(total);
           setState(() {});
@@ -183,6 +182,7 @@ class _CartPageState extends State<CartPage> {
         body: {
           "cartid": cartList[index].cartId,
         }).then((response) {
+          log(response.body);
       if (response.statusCode == 200) {
         var jsondata = jsonDecode(response.body);
         if (jsondata['status'] == 'success') {
