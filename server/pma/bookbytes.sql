@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 21, 2023 at 08:54 PM
+-- Generation Time: Jan 14, 2024 at 03:21 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -67,6 +67,36 @@ INSERT INTO `tbl_books` (`book_id`, `seller_id`, `book_isbn`, `book_title`, `boo
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_carts`
+--
+
+CREATE TABLE `tbl_carts` (
+  `cart_id` int(11) NOT NULL,
+  `buyer_id` int(11) NOT NULL,
+  `book_id` int(11) NOT NULL,
+  `seller_id` int(11) NOT NULL,
+  `cart_qty` float NOT NULL,
+  `cart_status` int(11) NOT NULL,
+  `cart_date` date NOT NULL DEFAULT current_timestamp(),
+  `book_title` varchar(50) NOT NULL,
+  `book_price` float NOT NULL,
+  `book_qty` int(11) NOT NULL,
+  `book_status` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tbl_carts`
+--
+
+INSERT INTO `tbl_carts` (`cart_id`, `buyer_id`, `book_id`, `seller_id`, `cart_qty`, `cart_status`, `cart_date`, `book_title`, `book_price`, `book_qty`, `book_status`) VALUES
+(14, 3, 2, 3, 1, 0, '2024-01-14', '', 0, 0, ''),
+(18, 3, 5, 3, 1, 0, '2024-01-14', '', 0, 0, ''),
+(19, 3, 6, 3, 1, 0, '2024-01-14', '', 0, 0, ''),
+(20, 3, 2, 3, 1, 0, '2024-01-14', '', 0, 0, '');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_user`
 --
 
@@ -84,11 +114,18 @@ CREATE TABLE `tbl_user` (
 
 INSERT INTO `tbl_user` (`user_id`, `user_name`, `user_email`, `user_pass`, `user_datereg`) VALUES
 (1, 'anisfatini', 'anis@gmail.com', 'cf8af373300cd679b5e7facc2bfde6af57924ea8', '2023-12-08 05:11:29.500062'),
-(2, 'amirah', 'amirah@gmail.com', 'c644531cef6545c768e1ab2ab7e7462ee2bd3a5f', '2023-12-10 01:09:45.779759');
+(2, 'amirah', 'amirah@gmail.com', 'c644531cef6545c768e1ab2ab7e7462ee2bd3a5f', '2023-12-10 01:09:45.779759'),
+(3, 'tan', 'tan@gmail.com', '389eee98c817d676afded558cdcfae03465504df', '2024-01-13 08:34:47.309636');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `tbl_carts`
+--
+ALTER TABLE `tbl_carts`
+  ADD PRIMARY KEY (`cart_id`);
 
 --
 -- Indexes for table `tbl_user`
@@ -102,10 +139,16 @@ ALTER TABLE `tbl_user`
 --
 
 --
+-- AUTO_INCREMENT for table `tbl_carts`
+--
+ALTER TABLE `tbl_carts`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
