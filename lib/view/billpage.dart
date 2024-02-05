@@ -1,38 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class BillScreen extends StatelessWidget {
-  final double totalAmount;
+import '../models/user.dart';
 
-  BillScreen({required this.totalAmount});
+class BillScreen extends StatefulWidget {
+  final User user;
+  final double totalprice;
+  const BillScreen({super.key, required this.user, required this.totalprice});
 
+  @override
+  State<BillScreen> createState() => _BillScreenState();
+}
+
+class _BillScreenState extends State<BillScreen> {
+   var loadingPercentage = 0;
+  late WebViewController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.user.userphone);
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(
+        Uri.parse(
+            'https://ansf.infinitebe.com/bookbytes/php/payment.php?&userid=${widget.user.userid}&email=${widget.user.useremail}&phone=${widget.user.userphone}&name=${widget.user.username}&amount=${widget.totalprice}'),
+      );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bill Page'),
-      ),
+      appBar: AppBar(),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Total Amount:',
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 10),
-            Text(
-              '\$$totalAmount',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Perform payment logic here
-                // You can navigate to a success page or perform any other action
-              },
-              child: Text('Pay Now'),
-            ),
-          ],
+        child: WebViewWidget(
+          controller: controller,
         ),
       ),
     );

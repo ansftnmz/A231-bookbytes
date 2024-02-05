@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:bookbytes/shared/loginpage.dart';
 import 'package:bookbytes/models/util/myservercofig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -17,9 +20,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _emailditingController = TextEditingController();
   final TextEditingController _passEditingController = TextEditingController();
   final TextEditingController _pass2EditingController = TextEditingController();
+  final TextEditingController _phoneEditingController = TextEditingController();
+  final TextEditingController _addrEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String eula = "";
   bool _isChecked = false;
+  String addr = "";
+  late double screenWidth, screenHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +42,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
        
        SingleChildScrollView(
           child: Center(
-            heightFactor: 1.7,
+            heightFactor: 1.5,
               child : Container( 
                 padding: const EdgeInsets.all(14.5),
                 child: Form(
@@ -59,6 +66,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                           validator: (val) => val!.isEmpty || (val.length < 3)
                               ? "name must be longer than 3"
+                              : null,
+                        ),
+                        TextFormField(
+                          controller: _phoneEditingController,
+                          keyboardType: TextInputType.phone,
+                          decoration: const InputDecoration(
+                            labelText: 'Phone',
+                            icon: Icon(Icons.phone),
+                          ),
+                          validator: (val) => val!.isEmpty || (val.length < 3)
+                              ? "Phone must be longer than 10"
                               : null,
                         ),
                         TextFormField(
@@ -93,6 +111,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             icon: Icon(Icons.lock),
                           ),
                           validator: (val) => validatePassword(val.toString()),
+                        ),
+                        TextFormField(
+                          controller: _addrEditingController,
+                          maxLines: 4,
+                          decoration: InputDecoration(
+                            labelText: 'Address',
+                            icon: const Icon(Icons.gps_fixed),
+                          ),
+                          validator: (val) => val!.isEmpty || (val.length < 3)
+                              ? "Phone must be longer than 10"
+                              : null,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -267,13 +296,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     String _name = _nameEditingController.text;
     String _email = _emailditingController.text;
     String _pass = _passEditingController.text;
+    String phone = _phoneEditingController.text;
+    String address = _addrEditingController.text;
 
     http.post(
         Uri.parse("${MyServerConfig.server}/bookbytes/php/userregister.php"),
         body: {
           "name": _name,
           "email": _email,
-          "password": _pass
+          "password": _pass,
+          "phone": phone,
+          "address": address,
         }).then((response) {
           print(response.body);
       if (response.statusCode == 200) {
@@ -296,3 +329,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     });
   }
 }
+  
+
+   

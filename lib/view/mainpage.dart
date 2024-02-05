@@ -1,5 +1,4 @@
 import 'package:bookbytes/models/user.dart';
-import 'package:bookbytes/shared/loginpage.dart';
 import 'package:bookbytes/view/cartpage.dart';
 import 'package:bookbytes/view/bookpage.dart';
 import 'package:bookbytes/view/profilepage.dart';
@@ -24,7 +23,7 @@ class _MainPageState extends State<MainPage> {
     tab_childs = [
       homePage(userdata: widget.userdata,),
       CartPage(user: widget.userdata,),
-      ProfilePage(),
+      ProfilePage(user: widget.userdata,),
     ];
   }
   Widget build(BuildContext context) {
@@ -66,11 +65,8 @@ class _MainPageState extends State<MainPage> {
       }
       if (_currentIndex == 2) {
         mainTitle = "Profile";
-        {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        }
-        ;
+        
+        
       }
     });
   }

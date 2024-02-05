@@ -82,8 +82,18 @@ class _CartPageState extends State<CartPage> {
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      ElevatedButton(
-                          onPressed: () {}, child: const Text("Pay Now"))
+                        ElevatedButton(
+                          onPressed: () async {
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (content) => BillScreen(
+                                          user: widget.user,
+                                          totalprice: total,
+                                        )));
+                            loadUserCart();
+                          },
+                          child: const Text("Pay Now"))
                     ],
                   ))
             ]),
