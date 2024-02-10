@@ -31,9 +31,21 @@ foreach ($data as $key => $value) {
     }
 }
  
-$signed= hash_hmac('sha256', $signing, 'S-wzNn8FTL0endIB4wgi728w');
+$signed= hash_hmac('sha256', $signing, 'S-EI1Zqmt1oUnogoJTGUNlrQ');
 if ($signed === $data['x_signature']) {
     if ($paidstatus == "Success"){ //payment success
+    
+    //update book quantity in tbl_books
+        $sqlcart = "SELECT * FROM `tbl_carts` WHERE `cart_status`='New' AND `buyer_id` = '$userid' ORDER BY `seller_id`";
+        $result = $conn->query($sqlcart);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $bookid = $row["book_id"];
+                $qty = $row["cart_qty"];
+                $sqlupdate = "UPDATE `tbl_books` SET `book_qty` = `book_qty` - $qty WHERE `book_id` = '$bookid'";
+                $conn->query($sqlupdate);
+            }
+        }
      
         $sqlcart = "SELECT * FROM `tbl_carts` WHERE `cart_status`='New' AND `buyer_id` = '$userid' ORDER BY `seller_id`;";
         $result = $conn->query($sqlcart);
@@ -99,6 +111,7 @@ if ($signed === $data['x_signature']) {
         <link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">
         <body>
         <center><h4>Receipt</h4></center>
+        <center><h4 style='color:MediumSeaGreen;'>Payment Successful</h4></center>
         <table class='w3-table w3-striped'>
         <th>Item</th><th>Description</th>
         <tr><td>Receipt</td><td>$receiptid</td></tr>
@@ -106,7 +119,6 @@ if ($signed === $data['x_signature']) {
         <tr><td>Email</td><td>$email</td></tr>
         <tr><td>Phone</td><td>$phone</td></tr>
         <tr><td>Paid Amount</td><td>RM$amount</td></tr>
-        <tr><td>Paid Status</td><td class='w3-text-green'>$paidstatus</td></tr>
         </table><br>
         </body>
         </html>";
@@ -119,6 +131,7 @@ if ($signed === $data['x_signature']) {
         <link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">
         <body>
         <center><h4>Receipt</h4></center>
+        <center><h4 style='color:Red;'>Payment Failed </h4></center>
         <table class='w3-table w3-striped'>
         <th>Item</th><th>Description</th>
         <tr><td>Receipt</td><td>$receiptid</td></tr>
@@ -126,7 +139,6 @@ if ($signed === $data['x_signature']) {
         <tr><td>Email</td><td>$email</td></tr>
         <tr><td>Phone</td><td>$phone</td></tr>
         <tr><td>Paid</td><td>RM $amount</td></tr>
-        <tr><td>Paid Status</td><td class='w3-text-red'>$paidstatus</td></tr>
         </table><br>
         
         </body>
