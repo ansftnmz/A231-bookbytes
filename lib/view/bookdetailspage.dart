@@ -158,6 +158,7 @@ class _BookDetailsState extends State<BookDetails> {
           "buyer_id": widget.user.userid.toString(),
           "seller_id": widget.book.sellerId.toString(),
           "book_id": widget.book.bookId.toString(),
+          "book_price": widget.book.bookPrice.toString(),
         }).then((response) {
       log(response.body);
       if (response.statusCode == 200) {

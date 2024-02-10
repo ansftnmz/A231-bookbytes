@@ -31,10 +31,10 @@ class _BillScreenState extends State<BillScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(backgroundColor: Colors.blueGrey,),
       body: Center(
         child: WebViewWidget(
-          controller: controller,
+          controller: controller, 
         ),
       ),
     );

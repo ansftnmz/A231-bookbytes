@@ -274,9 +274,9 @@ class _homePageState extends State<homePage> {
           "${MyServerConfig.server}/bookbytes/php/loadbooks.php?title=$title&pageno=$curpage"),
     )
         .then((response) {
-      log(response.body);
+      //log(response.body);
       if (response.statusCode == 200) {
-        log(response.body);
+        //log(response.body);
         var data = jsonDecode(response.body);
         if (data['status'] == "success") {
           bookList.clear();
